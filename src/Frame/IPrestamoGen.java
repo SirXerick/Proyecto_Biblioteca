@@ -10,7 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -188,11 +191,13 @@ public class IPrestamoGen extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnsalirActionPerformed
 
     private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
+            txtbuscar.requestFocus();
 
     }//GEN-LAST:event_txtbuscarActionPerformed
 
     private void btnAplazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplazarActionPerformed
-        // TODO add your handling code here:
+          String idest=txtbuscar.getText();
+          metodoaplazar(idest);
     }//GEN-LAST:event_btnAplazarActionPerformed
 
     private void btnbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbuscarActionPerformed
@@ -241,17 +246,11 @@ void metodoentregar (String idest) {
             Logger.getLogger(IPrestamoGen.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
-void metodoaplazar (String idest){
-     Calendar fecha = new GregorianCalendar();
-        int año = fecha.get(Calendar.YEAR);
-        int mes = fecha.get(Calendar.MONTH);
-        int dia = fecha.get(Calendar.DAY_OF_MONTH);
-        int hora = fecha.get(Calendar.HOUR_OF_DAY);
-        int minuto = fecha.get(Calendar.MINUTE);
-        int segundo = fecha.get(Calendar.SECOND);
-        String DataSystem = " ";
+void metodoaplazar (String idest) {
+    
+        String DataSystem = " ",fechas=" ";
         String idlibro= JOptionPane.showInputDialog("Confirma con ID del Libro que desea aplazar");    
-        String sql="SELECT FROM prestamo WHERE idest='"+idest+"' && idlibro='"+idlibro+"'";   
+        String sql="SELECT * FROM prestamo WHERE idest='"+idest+"' && idlibro='"+idlibro+"'";   
         
          try {
          Statement st = cn.createStatement();
@@ -259,14 +258,44 @@ void metodoaplazar (String idest){
           while(rs.next()){
              DataSystem=rs.getString("F_Entrega");
             }       
-             System.out.println(DataSystem);
-           //  fecha.add(DataSystem);
+            try {
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                Date Nfecha = formato.parse(DataSystem);
+                cal.setTime(Nfecha);
+                cal.add(Calendar.DAY_OF_MONTH, 5);
+                Nfecha = cal.getTime();
+                fechas = formato.format(Nfecha);
+                actualizarfecha(fechas,idest,idlibro);
+                
+            } catch (ParseException ex) {
+                Logger.getLogger(IPrestamoGen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
+    //Calendar calendar = Calendar.getInstance();
+    //calendar.setTime(DataSystem); // Configuramos la fecha que se recibe	
+    //calendar.add(Calendar.DAY_OF_YEAR, 5);  // numero de días a añadir, o restar en caso de días<0
+  
+
          
          } catch (SQLException ex) {
             Logger.getLogger(IPrestamoGen.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 }
+void actualizarfecha (String fecha, String idest, String idlibro){   
+String sql="UPDATE prestamo SET F_entrega='"+fecha+"' WHERE idest='"+idest+"' && idlibro='"+idlibro+"'";   
+        try {
+            PreparedStatement pst = cn.prepareStatement(sql);
+            int m=pst.executeUpdate();
+                if(m>0){
+                    JOptionPane.showMessageDialog(this, "se Actualizo la fecha de entrega");
+                    buscar(idest);
+                }  
+}
+ catch (SQLException ex) {
+            Logger.getLogger(IPrestamoGen.class.getName()).log(Level.SEVERE, null, ex);
+        }}
 void buscar (String bus){
     Boolean Desvio = false;
       DefaultTableModel tabla= new DefaultTableModel();
@@ -307,7 +336,7 @@ void buscar (String bus){
                 btnAplazar.setEnabled(false);
             }
             else {btnEntregar.setEnabled(true);
-                  btnAplazar.setEnabled(false);
+                  btnAplazar.setEnabled(true);
             }
         }
         catch (SQLException ex) {

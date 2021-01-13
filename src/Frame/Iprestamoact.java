@@ -5,6 +5,15 @@
  */
 package Frame;
 
+import static Frame.Estudiantes.lblcontrol;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author erick
@@ -15,7 +24,9 @@ public class Iprestamoact extends javax.swing.JInternalFrame {
      * Creates new form Iregistrop
      */
     public Iprestamoact() {
+       
         initComponents();
+         buscarprestamo();
     }
 
     /**
@@ -28,11 +39,14 @@ public class Iprestamoact extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tbpresact = new javax.swing.JTable();
+        btnatras = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        txtStatus = new javax.swing.JLabel();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        setClosable(true);
+
+        tbpresact.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -43,17 +57,20 @@ public class Iprestamoact extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbpresact);
 
-        jButton1.setText("Atras");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnatras.setText("Atras");
+        btnatras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnatrasActionPerformed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Prestamo Activo");
+
+        txtStatus.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtStatus.setText("asd");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,42 +78,90 @@ public class Iprestamoact extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addGap(26, 26, 26)
+                        .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtStatus)
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
+                .addComponent(btnatras, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnatrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnatrasActionPerformed
+    this.dispose();;
+    }//GEN-LAST:event_btnatrasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnatras;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tbpresact;
+    private javax.swing.JLabel txtStatus;
     // End of variables declaration//GEN-END:variables
+Conectar cc= new Conectar();
+Connection cn = cc.conexion();
+
+void buscarprestamo(){
+    
+    DefaultTableModel tabla= new DefaultTableModel();
+    String idest=lblcontrol.getText();
+    String consulta = " ";
+    consulta = "SELECT p.id,p.idest,idrec,l.titulo, p.F_inicio,p.F_Entrega,l.id FROM prestamo p INNER JOIN Libros l ON p.idlibro = l.id WHERE p.idest='"+idest+"' && p.entregado=false";
+    String []titulos={"ID","Ncontrol","RC","Libro","Fecha_Inicio","Fecha_Entrega"};
+        tabla.setColumnIdentifiers(titulos);
+        this.tbpresact.setModel(tabla);
+        String []Datos= new String [6];
+        Datos[0]="";
+        try {
+         Statement st = cn.createStatement();
+         ResultSet rs = st.executeQuery(consulta);  
+         while(rs.next()){
+                    Datos[0]=rs.getString("p.id");
+                    Datos[1]=rs.getString("p.idest");
+                    Datos[2]=rs.getString("p.idrec");
+                    Datos[3]=rs.getString("l.titulo");
+                    Datos[4]=rs.getString("p.F_inicio");
+                    Datos[5]=rs.getString("p.F_entrega");
+                    tabla.addRow(Datos);
+            }
+        if(Datos[0].equals("")){
+        txtStatus.setText("Usted es Acreedor de un Prestamo");
+        }
+        else {
+          txtStatus.setText("Usted debe entregar los siguientes libros en los proximos dias..");
+        }
+            
+        
+        
+        
+        }
+catch (SQLException ex) {
+            Logger.getLogger(IPrestamoGen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+}
 }

@@ -20,10 +20,11 @@ public class Conectar {
     Connection conect = null;
     public Connection conexion()
     {
-        
+        //SQL SERVER: conect =DriverManager.getConnection("jbdc:sqlserver://servername\\SQLEXPRESS:1433;databaseName=Nombrebd;user=sa;password=contraseña;");
+
         try {  
-       //     Class.forName("com.mysql.jdbc.Driver");
-          conect = DriverManager.getConnection("jdbc:mysql://localhost/euri","erick","erick09");
+            // Class.forName("com.mysql.jdbc.Driver");   
+       conect = DriverManager.getConnection("jdbc:mysql://localhost/bd_Biblioteca","erick","erick09");
         } catch (Exception e) {
         JOptionPane.showMessageDialog(null,"Error en la conexion"+e);
         }

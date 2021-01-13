@@ -6,10 +6,12 @@
 package Frame;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -368,7 +370,7 @@ void verificarl (String id){
             Logger.getLogger(IRegistrarP.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
-public void calendario () {
+void calendario () {
     Calendar fecha = new GregorianCalendar();
         int año = fecha.get(Calendar.YEAR);
         int mes = fecha.get(Calendar.MONTH);
@@ -387,7 +389,7 @@ public void calendario () {
        Fentrega = (año+"-"+(mes+1)+"-"+dia);
               }
 
-void limpiar (){
+void limpiar (){    
     txtncontrol.setText("");
     txtlibro.setText("");
 }

@@ -5,12 +5,18 @@
  */
 package Frame;
 
+import java.awt.Color;
 import java.awt.Image;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 /**
  *
  * @author erick
@@ -24,7 +30,7 @@ public class Estudiantes extends javax.swing.JFrame {
         this.setLocation(500,200);
         initComponents();
         J1.setIcon(setIcono("/imagenes/123.png",J1));
-
+       
     }
 
     /**
@@ -36,31 +42,24 @@ public class Estudiantes extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        J1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        TxtEst = new javax.swing.JLabel();
+        btnPresact = new javax.swing.JButton();
+        btnbibli = new javax.swing.JButton();
         lblnombre = new javax.swing.JLabel();
         lblcontrol = new javax.swing.JLabel();
-        btnbibli = new javax.swing.JButton();
-        btnPresact = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
-        TxtEst = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         TxtStatus = new javax.swing.JLabel();
+        J1 = new javax.swing.JLabel();
+        jdpescritorio = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        J1.setText("   ");
-        J1.setToolTipText("");
+        jPanel1.setPreferredSize(new java.awt.Dimension(960, 560));
 
-        lblnombre.setText("Nombre");
-
-        lblcontrol.setText("Ncontrol");
-
-        btnbibli.setText("Biblioteca");
-        btnbibli.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbibliActionPerformed(evt);
-            }
-        });
+        TxtEst.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
+        TxtEst.setText("ESTUDIANTE");
 
         btnPresact.setText("Prestamo Activo");
         btnPresact.addActionListener(new java.awt.event.ActionListener() {
@@ -69,6 +68,17 @@ public class Estudiantes extends javax.swing.JFrame {
             }
         });
 
+        btnbibli.setText("Biblioteca");
+        btnbibli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbibliActionPerformed(evt);
+            }
+        });
+
+        lblnombre.setText("Nombre");
+
+        lblcontrol.setText("Ncontrol");
+
         jButton1.setText("Cerrar Sesion");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -76,88 +86,126 @@ public class Estudiantes extends javax.swing.JFrame {
             }
         });
 
-        TxtEst.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        TxtEst.setText("ESTUDIANTE");
-
         jLabel4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jLabel4.setText("Status:");
 
+        TxtStatus.setBackground(new java.awt.Color(153, 153, 153));
         TxtStatus.setText("estado");
+        TxtStatus.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TxtStatusFocusGained(evt);
+            }
+        });
+        TxtStatus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TxtStatusMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                TxtStatusMouseEntered(evt);
+            }
+        });
+
+        J1.setText("   ");
+        J1.setToolTipText("");
+
+        javax.swing.GroupLayout jdpescritorioLayout = new javax.swing.GroupLayout(jdpescritorio);
+        jdpescritorio.setLayout(jdpescritorioLayout);
+        jdpescritorioLayout.setHorizontalGroup(
+            jdpescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jdpescritorioLayout.setVerticalGroup(
+            jdpescritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(TxtEst)
+                .addGap(146, 146, 146)
+                .addComponent(btnPresact, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
+                .addComponent(btnbibli, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(178, 178, 178))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(J1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(TxtStatus))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblnombre))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblcontrol)))
+                .addGap(18, 18, 18)
+                .addComponent(jdpescritorio)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnPresact, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnbibli, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TxtEst, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(J1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(lblnombre)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblcontrol)
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(TxtStatus))
+                        .addGap(65, 65, 65)
+                        .addComponent(jButton1)
+                        .addGap(0, 156, Short.MAX_VALUE))
+                    .addComponent(jdpescritorio))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(201, 201, 201)
-                        .addComponent(btnPresact, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(lblcontrol)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnbibli, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(179, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TxtStatus)
-                .addGap(96, 96, 96))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 22, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(TxtEst)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(20, 20, 20)
-                            .addComponent(lblnombre))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(400, 400, 400)
-                            .addComponent(jButton1)))
-                    .addGap(0, 23, Short.MAX_VALUE))
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(42, 42, 42)
-                    .addComponent(J1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 973, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(TxtStatus))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
-                .addComponent(btnPresact, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnbibli, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblcontrol))
-                .addGap(104, 104, 104))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(TxtEst)
-                    .addGap(21, 21, 21)
-                    .addComponent(J1, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(lblnombre)
-                    .addGap(124, 124, 124)
-                    .addComponent(jButton1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnbibliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbibliActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnbibliActionPerformed
+            IBiblioteca cli = new IBiblioteca();
+                 jdpescritorio.add(cli);
+                     cli.show();;  
+            }//GEN-LAST:event_btnbibliActionPerformed
 
     private void btnPresactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPresactActionPerformed
-        // TODO add your handling code here:
+       Iprestamoact cli = new Iprestamoact();
+                jdpescritorio.add(cli);
+                cli.show();
     }//GEN-LAST:event_btnPresactActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -169,11 +217,24 @@ public class Estudiantes extends javax.swing.JFrame {
                
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void TxtStatusFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TxtStatusFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtStatusFocusGained
+
+    private void TxtStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TxtStatusMouseClicked
+  
+    }//GEN-LAST:event_TxtStatusMouseClicked
+
+    private void TxtStatusMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TxtStatusMouseEntered
+         buscarstatus();
+    }//GEN-LAST:event_TxtStatusMouseEntered
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
+     
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -200,6 +261,7 @@ public class Estudiantes extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Estudiantes().setVisible(true);
+               
             }
         });
     }
@@ -212,6 +274,8 @@ public class Estudiantes extends javax.swing.JFrame {
     private javax.swing.JButton btnbibli;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JDesktopPane jdpescritorio;
     public static javax.swing.JLabel lblcontrol;
     public static javax.swing.JLabel lblnombre;
     // End of variables declaration//GEN-END:variables
@@ -222,4 +286,30 @@ public Icon setIcono (String url, JLabel panel){
         int alto = panel.getHeight();
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(ancho,alto, Image.SCALE_DEFAULT));
         return icono;
-}}
+}
+void buscarstatus(){
+        String idest=lblcontrol.getText();
+    String consulta = "",capturar ="";
+    consulta = "SELECT * FROM prestamo WHERE idest='"+idest+"' && entregado=false";
+    
+        try {
+         Statement st = cn.createStatement();
+         ResultSet rs = st.executeQuery(consulta);  
+         while(rs.next()){
+                    capturar=rs.getString("id");
+            }
+         if(capturar.equals("")){
+        TxtStatus.setText("Acreedor");
+        TxtStatus.setForeground(Color.green);}
+         else{
+        TxtStatus.setText("Deudor");
+        TxtStatus.setForeground(Color.red);
+        }}
+catch (SQLException ex) {
+            Logger.getLogger(IPrestamoGen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+}
+Conectar cc = new Conectar();
+Connection cn = cc.conexion();
+}

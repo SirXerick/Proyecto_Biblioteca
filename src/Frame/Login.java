@@ -169,7 +169,7 @@ class FondoPanel extends JPanel{
     private Image imagen; 
     @Override
     public void paint (Graphics g)
-    {
+    {   
       imagen = new ImageIcon(getClass().getResource("/imagenes/fondos.jpg")).getImage();   
       g.drawImage(imagen,0,0,getWidth(),getHeight(),this);
       setOpaque(false);
@@ -197,6 +197,7 @@ void acceder (String id,String pswd) {
                 ingreso.pack();
                 Estudiantes.lblnombre.setText(Nombre);
                 Estudiantes.lblcontrol.setText(id);
+               
             }
             if (capturar.equals("rc")){
                 this.setVisible(false);
@@ -249,13 +250,42 @@ void acceder1 (String id,String pswd) {
             }
             if ((!capturar.equals("Est"))&&(!capturar.equals("rc"))) 
             {
-                JOptionPane.showMessageDialog(null,"no se encontro Resultados");
+               accederA(id,pswd);
             }    
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
+void accederA (String id,String pswd){
+  String capturar = "",Nombre = "",turno="";
+    String sql="SELECT * FROM administrador WHERE id='"+id+"' && contraseña='"+pswd+"'";   
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next())
+            {
+             capturar=rs.getString("tipo");
+             Nombre=rs.getString("Nombre");
+            }
+            if (capturar.equals("ad")){
+                this.setVisible(false);
+                JOptionPane.showMessageDialog(null," Bienvenido: "+Nombre);
+                administrador ingreso = new administrador();
+                ingreso.setVisible(true);
+                ingreso.pack();  
+                administrador.lblnombre.setText(Nombre);
+            }
+            if ((!capturar.equals("ad"))) 
+            {
+                JOptionPane.showMessageDialog(null,"no se encontro Resultados");
+            }    
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+
+
+}
 //conexion a la base de datos 
 Conectar cc = new Conectar();
 Connection cn = cc.conexion();
